@@ -5,25 +5,6 @@
 
 ![image](https://github.com/user-attachments/assets/449d7af2-cbe7-4000-ba24-48fb39e3b906)
 
-Login as ariifpeycal
-![image](https://github.com/user-attachments/assets/4397f733-0c78-4344-9dba-ddebfd6f2300)
-
-![image](https://github.com/user-attachments/assets/df697526-cc94-45a8-a147-c4f728c4e2c4)
-
-![image](https://github.com/user-attachments/assets/1e28ad72-94b7-4b26-afc0-9ef81716b448)
-
-![image](https://github.com/user-attachments/assets/31c174d8-fad8-40fa-8f13-2cdcaf91dab7)
-
-![image](https://github.com/user-attachments/assets/5469bd2c-7ad6-4a5e-b1cc-6589b24fcf5d)
-
-![image](https://github.com/user-attachments/assets/5deccfc8-990c-4614-b98d-be8b73f90b06)
-
-
-![image](https://github.com/user-attachments/assets/aca9419d-4c8f-4741-8dcd-4d7f838d7d62)
-
-![image](https://github.com/user-attachments/assets/bbe0b749-5f52-4b5a-a06f-6281172f216f)
-
-
 ---
 
 # Windows Active Directory Setup and Management
@@ -125,6 +106,13 @@ Naming a Windows Server, especially a Domain Controller, helps identify it withi
 
 ![image](https://github.com/user-attachments/assets/fc044f8b-482d-4482-8623-ecdf09688c4e)
 
+#### Logging In as Users
+
+![image](https://github.com/user-attachments/assets/4397f733-0c78-4344-9dba-ddebfd6f2300)
+
+![image](https://github.com/user-attachments/assets/df697526-cc94-45a8-a147-c4f728c4e2c4)
+
+![image](https://github.com/user-attachments/assets/1e28ad72-94b7-4b26-afc0-9ef81716b448)
 #### Resetting Passwords
 1. Right-click the user account and select **Reset Password**.
 2. Enter and confirm the new password.
@@ -146,24 +134,20 @@ To remove an account permanently:
 1. Right-click the user in Active Directory Users and Computers.
 2. Select Delete, then confirm the deletion.
 
+---
+
+### Adding Computers
 
 If you want to create a computer account before joining the computer to the domain:
 
-1. Open Active Directory Users and Computers
-Go to Server Manager > Tools > Active Directory Users and Computers.
-2. Navigate to the Appropriate OU
-By default, computers are placed in the Computers container.
+1. Go to Server Manager > Tools > Active Directory Users and Computers.
+2. Navigate to the Appropriate OU. By default, computers are placed in the Computers container.
 If you have a dedicated Organizational Unit (OU) for computers (e.g., Workstations, Servers), navigate to it.
-3. Create a New Computer Account
-Right-click the OU or container where you want to add the computer.
-Select New > Computer.
-4. Configure Computer Properties
-Enter a Computer Name (e.g., PC01, HR-Laptop01).
-Optionally, configure the following:
-User or Group: Click Change to specify which user or group can join this computer to the domain. By default, domain admins have this right.
-Description: Add a brief description for reference.
-5. Save the Computer Account
-Click OK to create the computer account.
+3. Right-click the OU or container where you want to add the computer.
+4. Select New > Computer.
+5. Configure Computer Properties
+- Enter a Computer Name (e.g., PC01, HR-Laptop01).
+6. Click OK to create the computer account.
 ![image](https://github.com/user-attachments/assets/1acd9475-b95c-4719-8216-10dc363d5ce6)
 
 ---
@@ -295,3 +279,15 @@ Computer Configuration > Policies > Software Settings > Software Installation
 Add software packages for deployment via .msi files.
 
 ![image](https://github.com/user-attachments/assets/f7a1401c-7c10-464c-bee5-396478c6c940)
+
+
+  <!--![image](https://github.com/user-attachments/assets/31c174d8-fad8-40fa-8f13-2cdcaf91dab7) 
+
+<!-- ![image](https://github.com/user-attachments/assets/5469bd2c-7ad6-4a5e-b1cc-6589b24fcf5d)
+
+[//]: # ![image](https://github.com/user-attachments/assets/5deccfc8-990c-4614-b98d-be8b73f90b06)
+
+
+ [//]: # ![image](https://github.com/user-attachments/assets/aca9419d-4c8f-4741-8dcd-4d7f838d7d62)
+
+[//]: # ![image](https://github.com/user-attachments/assets/bbe0b749-5f52-4b5a-a06f-6281172f216f) -->
