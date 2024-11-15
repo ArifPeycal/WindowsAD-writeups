@@ -2,9 +2,11 @@
 
 # Windows Active Directory Setup and Management
 
-This guide walks you through the process of setting up and managing Active Directory (AD) on a Windows Server, including configuring users, groups, and Group Policies.
+This guide walks you through the process of setting up and managing Active Directory (AD) on a Windows Server 2019, including configuring users, groups, and Group Policies.
 
-![image](https://github.com/user-attachments/assets/5ab7685b-5465-4f6e-954f-fee2842089ba)
+![image](https://github.com/user-attachments/assets/755e2ec2-ba8d-4455-b78d-f60ac6b2e523)
+
+<!-- ![image](https://github.com/user-attachments/assets/5ab7685b-5465-4f6e-954f-fee2842089ba) -->
 
 ---
 
@@ -22,6 +24,29 @@ This guide walks you through the process of setting up and managing Active Direc
 6. [Group Policy Management](#group-policy-management)
 
 ---
+## Introduction to AD
+### What is Active Directory (AD)?
+Active Directory (AD) is a system used by companies to manage users, computers, and other devices in a network. Think of it as a giant phonebook or address book that keeps track of all the resources on a network and makes sure the right people (and computers) can access them. AD helps organize everything and makes it easier for admins to control who can do what, and it also keeps the network secure.
+
+### Key Terms in Active Directory
+
+![image](https://github.com/user-attachments/assets/616f4115-63e9-4b3b-9712-3a565001bdfc)
+
+- Domain: A group of networked devices and users that share the same settings and rules (`mycompany.com`). 
+- Domain Controller (DC): The server that manages the domain, checks if people are allowed to access networks.
+- Organizational Unit: A folder to organize things in AD, organised by department or team (`IT`, `HR`, `Sales`).
+- Group Policy (GPO): Rules for the network, like password settings.
+  
+![image](https://github.com/user-attachments/assets/6056dfbb-ecf5-4275-8cb3-6cc69ea46f8c)
+
+- Forest: The top-level container in AD, made up of one or more domains.
+- Tree: Collection of domains that are connected and share a similar naming system (`company.com` and `sales.company.com`).
+- Trust Relationship: Agreements between domains that let users from one domain access resources in another domain
+  
+
+- LDAP: A protocol used to interact with AD.
+- Kerberos: A system that checks if users are who they say they are.
+
 
 ## Naming the Server
 ### Why Name the Server?
@@ -38,6 +63,14 @@ Naming a Windows Server, especially a Domain Controller, helps identify it withi
 ---
 
 ## Installing AD DS
+### What is AD DS
+Active Directory Domain Services (AD DS) is a core component of Active Directory (AD). It handles authentication, authorization, directory services, group policies and many more. 
+
+### Why is AD DS Important?
+- **Security**: AD DS helps keep a network secure by verifying user identities and enforcing security policies.
+- **Scalability**: It makes it easier for large organizations to manage thousands or even millions of users and devices.
+- **Centralized Control**: It allows system admins to manage everything from one location, saving time and effort.
+
 ### Steps to Install:
 1. Open **Server Manager** and click **Manage > Add Roles and Features**.
    
@@ -55,6 +88,8 @@ Naming a Windows Server, especially a Domain Controller, helps identify it withi
 ---
 
 ## Promoting the Server to a Domain Controller
+Now we want to turn a regular server into one that can manage and authenticate users and devices within a domain using Active Directory Domain Services. Once the promotion is complete, the server is fully part of the Active Directory domain and can start handling authentication requests, group policy enforcement, and other domain management tasks!
+
 1. In **Server Manager**, click the warning flag and select **Promote this server to a domain controller**.
 
 ![image](https://github.com/user-attachments/assets/2b0d931c-b8bd-4f9b-838f-53a6dcdbf2d0)
@@ -70,10 +105,30 @@ Naming a Windows Server, especially a Domain Controller, helps identify it withi
    - Set **Functional Levels** (highest supported version).
    - Enable **DNS Server** if needed.
    - Set the **Directory Services Restore Mode (DSRM) password**.
+4. Complete the wizard and allow the server to restart.
+
 ![image](https://github.com/user-attachments/assets/e28b705e-3c4f-4348-ae5e-7e75dde984bf)
 ![image](https://github.com/user-attachments/assets/a14b21d7-7125-44b2-bdcd-aeb064687922)
 
-4. Complete the wizard and allow the server to restart.
+> 1. Database Folder
+> - **What It Contains**: `ntds.dit`.
+> - **Importance**: When a Domain Controller is promoted, this is where all the objects (users, groups, devices, etc.) and their attributes are stored. The Domain Controller refers to this database to authenticate and authorize requests within the domain.
+> 
+> 2. Log Folder
+> - **What It Contains**: Transaction log files which are named edb*.log (e.g., edb00001.log, edb00002.log).
+> - **Purpose**:
+>    - These log files are used for transactional integrity.
+>    - Every change made to the Active Directory database (such as adding a new user or changing a password) is first written to these log files before being written to the main `ntds.dit` database.
+>    - If the server crashes before changes are written to the database, the log files can be replayed to restore the changes and ensure no data is lost.
+> 
+> 3. SYSVOL Folder
+> - **What It Contains**: SYSVOL is a shared directory that stores public files, scripts, and other content that needs to be accessible to all Domain Controllers in the domain. It includes:
+>    - Group Policy Objects (GPOs): These are settings that can control aspects of domain and computer configurations, like security settings, desktop configurations, and login scripts.
+>    - Scripts: This folder can store logon/logoff scripts, startup/shutdown scripts, and other executable scripts that need to be run in the domain.
+> - **Purpose**:
+>    - SYSVOL is essential for replication of Active Directory data between Domain Controllers.
+>    - It's also where group policies that are applied to users and computers within the domain are stored.
+
 
 ---
 
@@ -94,6 +149,9 @@ Naming a Windows Server, especially a Domain Controller, helps identify it withi
 4. Ensure **Protect container from accidental deletion** is checked.
 
 ![image](https://github.com/user-attachments/assets/2b4b8e4b-f7f0-42b9-89b0-a285f430ba84)
+
+You can see there are 2 OU that had been created which are `Sales` and `IT Department`.
+
 ![image](https://github.com/user-attachments/assets/659029ba-3968-4c71-b2a4-72dbd080b90f)
 
 
@@ -143,12 +201,12 @@ To remove an account permanently:
 
 If you want to create a computer account before joining the computer to the domain:
 
-1. Go to Server Manager > Tools > Active Directory Users and Computers.
+1. Go to `Server Manager > Tools > Active Directory Users and Computers`.
 2. Navigate to the Appropriate OU. (Default, computers are placed in the Computers container.)
 3. Right-click the OU or container where you want to add the computer.
-4. Select New > Computer.
+4. Select `New > Computer`.
 5. Configure Computer Properties
-- Enter a Computer Name (e.g., PC01, HR-Laptop01).
+- Enter a Computer Name (e.g., `PC01`, `HR-Laptop01`).
 6. Click OK to create the computer account.
 
 ![image](https://github.com/user-attachments/assets/1acd9475-b95c-4719-8216-10dc363d5ce6)
@@ -270,8 +328,10 @@ Scope: GPOs can be applied at different levels:
 ![image](https://github.com/user-attachments/assets/4decc82a-f83b-48b4-8eae-401c1943aca9)
 
 #### Software Deployment
+Group Policy allows you to deploy software packages (usually in `.msi` format) to computers in your network automatically. This is useful for ensuring that software is installed consistently and automatically across multiple machines without user interaction.
+
 1. Navigate to `Computer Configuration > Policies > Software Settings > Software Installation`
-2. Add software packages for deployment via .msi files.
+2. Add software packages for deployment via `.msi` files.
 
 ![image](https://github.com/user-attachments/assets/f7a1401c-7c10-464c-bee5-396478c6c940)
 
